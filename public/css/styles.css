@@ -1,0 +1,10 @@
+#iframe-mapa {
+    padding-left: 0;
+    padding-right: 0;
+    border: 0px;
+}
+
+.flotante-top {
+    position: sticky;
+    top: 30px;
+}
