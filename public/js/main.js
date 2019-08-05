@@ -87,11 +87,17 @@ Vue.component('messages-container', {
           <span v-if="!usuarioActivo">
             <div class="row center-align">
               <h5>Loggin to your acount</h5>
-              <button class="btn-small red" @click="iniciarSesion">Login with Google</button>
-              <button class="btn-small red" @click="cerrarSesion">Log out</button>
+              <button class="btn-small red" @click="iniciarSesion()">Login with Google</button>
+              <button class="btn-small red" @click="cerrarSesion()">Log out</button>
             </div>
           </span>
 
+          <span v-if="usuarioActivo">
+            <div class="row center-align">
+              <h5>Ya estas logueado</h5>
+              <button class="btn-small red" @click="cerrarSesion()">Log out</button>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -104,20 +110,31 @@ Vue.component('messages-container', {
     iniciarSesion() {
       let provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider);
-      this.usuarioActivo = firebase.auth().currentUser;
     },
 
     cerrarSesion() {
       firebase.auth().signOut();
-    },
+    }
+  },
+
+  created() {
+    this.usuarioActivo = firebase.auth().currentUser;
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.usuarioActivo = firebase.auth().currentUser;
+      } else {
+        this.usuarioActivo = null;
+      }
+    });
   },
 
   data() {
     return {
-      usuarioActivo: null
+      usuarioActivo: null,
     }
-  }
-})
+  },
+});
 
 Vue.component('map-container', {
   props: ['estadio'],
@@ -272,6 +289,7 @@ Vue.component('calendar', {
           <error>There is no results to show.</error>
         </span>
       </span>
+
       <span v-show="foro.mostrar">
         <messages-container :partido="foro.juego"></messages-container>
       </span>
