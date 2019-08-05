@@ -1,5 +1,25 @@
+'use strict';
 
-Vue.component("navbar", {
+// Config Firebase
+var firebaseConfig = {
+    apiKey: "AIzaSyCfUCM93A6itbYUrv-jhMyY6pvK9tlveV4",
+    authDomain: "nysl-cap-webapp.firebaseapp.com",
+    databaseURL: "https://nysl-cap-webapp.firebaseio.com",
+    projectId: "nysl-cap-webapp",
+    storageBucket: "",
+    messagingSenderId: "44674422756",
+    appId: "1:44674422756:web:fbb1d5df703b8944"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+const database = firebase.database();
+
+// Materialize init
+document.addEventListener('DOMContentLoaded', () => { M.AutoInit() });
+
+Vue.component('navbar', {
   template: `
   <div>
     <div class="navbar-fixed">
@@ -15,17 +35,24 @@ Vue.component("navbar", {
             <li><a href="#" @click="comunicarCambio('about')">About Us</a></li>
             <li><a href="#" @click="comunicarCambio('contact')">Contact</a></li>
           </ul>
-        </div>
+        </div>    
       </nav>
     </div>
 
     <ul id="menu-hamburguesa" class="sidenav show-on-medium-and-down grey lighten-4">
-      <li class="sidenav-close"><a href="#" @click="comunicarCambio('calendar')"><i class="material-icons">event</i>Calendar</a></li>
-      <li class="sidenav-close"><a href="#" @click="comunicarCambio('about')"><i class="material-icons">contact_support</i>About Us</a></li>
-      <li class="sidenav-close"><a href="#" @click="comunicarCambio('contact')"><i class="material-icons">message</i>Contact</a></li>
+      <li class="sidenav-close"><a href="#" @click="comunicarCambio('calendar')">
+        <i class="material-icons">event</i>Calendar</a>
+      </li>
+      <li class="sidenav-close">
+        <a href="#" @click="comunicarCambio('about')"><i class="material-icons">contact_support</i>About Us</a>
+      </li>
+      <li class="sidenav-close">
+        <a href="#" @click="comunicarCambio('contact')"><i class="material-icons">message</i>Contact</a>
+      </li>
     </ul>
   </div>
   `,
+
   methods: {
     comunicarCambio(nombreComponentePresionado) {
       this.$emit("cambia-componente", nombreComponentePresionado);
@@ -50,6 +77,48 @@ Vue.component('error', {
   `
 })
 
+Vue.component('messages-container', {
+  props: ['partido'],
+  template: `
+    <div class="row">
+      <div class="col s12">
+        <div class="card-panel">
+
+          <span v-if="!usuarioActivo">
+            <div class="row center-align">
+              <h5>Loggin to your acount</h5>
+              <button class="btn-small red" @click="iniciarSesion">Login with Google</button>
+              <button class="btn-small red" @click="cerrarSesion">Log out</button>
+            </div>
+          </span>
+
+        </div>
+      </div>
+    </div>
+  `,
+  methods: {
+    emitirEventoCerrarForo() {
+      this.$root.$emit('cerrarForo');
+    },
+
+    iniciarSesion() {
+      let provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider);
+      this.usuarioActivo = firebase.auth().currentUser;
+    },
+
+    cerrarSesion() {
+      firebase.auth().signOut();
+    },
+  },
+
+  data() {
+    return {
+      usuarioActivo: null
+    }
+  }
+})
+
 Vue.component('map-container', {
   props: ['estadio'],
   template: `
@@ -68,16 +137,16 @@ Vue.component('map-container', {
 Vue.component('month', {
   props: ['juegosDelMes'],
   template: `
-  <div class="col s12">
-    <div class="card-panel">
-      <ul class="collection with-header">
-        <li class="collection-headder center-align">
-          <h5>{{ juegosDelMes[0].mes }}</h5>
-        </li>
-        <li 
-          v-for="juego in juegosDelMes"
-          @click="emitirEventoJuegoPresionado(juego)"
-        >
+    <div class="col s12">
+      <div class="card-panel">
+        <ul class="collection with-header">
+          <li class="collection-headder center-align">
+            <h5>{{ juegosDelMes[0].mes }}</h5>
+          </li>
+          <li
+            v-for="juego in juegosDelMes"
+            @click="emitirEventoJuegoPresionado(juego)"
+          >
           <div class="row center-align">
             <div class="col s4">{{ juego.equipo1 }}</div>
             <div class="col s4">
@@ -87,18 +156,26 @@ Vue.component('month', {
                 <div class="col s12">
                   <a :href="juego.estadio.mapUrl" class="blue-text text-darken-4">{{ juego.estadio.nombre }}</a>
                 </div>
+                <div>
+                  <a href="#" class="blue-text text-darken-4" @click="emitirEventoActivarForo(juego)">Messages</a>
+                </div>
               </div>
             </div>
             <div class="col s4">{{ juego.equipo2 }}</div>
-          </div>
-        </li>
-      </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
   `,
+
   methods: {
     emitirEventoJuegoPresionado(juegoPresionado) {
       this.$root.$emit('juegoPresionado', juegoPresionado);
+    },
+
+    emitirEventoActivarForo(juego) {
+      this.$root.$emit('activarForo', juego);
     }
   }
 });
@@ -111,14 +188,13 @@ Vue.component('filtro', {
       <div class="collapsible-header"><i class="material-icons">settings</i>Filters</div>
       <div class="collapsible-body white">
         <div class="row">
-          
           <div class="input-field col s12">
-            <select multiple id="select-teams" @change="emitirEventoFiltro()">
+            <select multiple v-model="equiposSeleccionados" @change="emitirEventoFiltro()">
               <option 
                 v-for="equipo in equiposTotales"
+                :key="equipo"
                 :value="equipo"
                 v-text="equipo"
-                selected
               >
               </option>
             </select>
@@ -126,12 +202,12 @@ Vue.component('filtro', {
           </div>
 
           <div class="input-field col s12">
-            <select multiple id="select-locations" @change="emitirEventoFiltro()">
+            <select multiple v-model="estadiosSeleccionados" @change="emitirEventoFiltro()">
               <option 
-                v-for="ubicacion in ubicacionesTotales"
+                v-for="ubicacion in estadiosTotales"
+                :key="ubicacion"
                 :value="ubicacion"
                 v-text="ubicacion"
-                selected
               >
               </option>
             </select>
@@ -142,109 +218,149 @@ Vue.component('filtro', {
     </li>
   </ul>
   `,
-  computed: {
-    equiposTotales() {
-      let equipos = [];
-      this.partidos.forEach(partido => {
-        equipos.push(partido.equipo1);
-        equipos.push(partido.equipo2);
-      });
-      equipos.sort();
-      return [...new Set(equipos)];
-    },
-    ubicacionesTotales() {
-      let ubicaciones = [];
-      this.partidos.forEach(partido => {
-        if (!ubicaciones.includes(partido.estadio.nombre)) {
-          ubicaciones.push(partido.estadio.nombre);
-        }
-      });
-      ubicaciones.sort();
-      return ubicaciones;
+
+  data() {
+    return {
+      equiposTotales: [],
+      estadiosTotales: [],
+      equiposSeleccionados: [],
+      estadiosSeleccionados: [],
     }
   },
+
   methods: {
     emitirEventoFiltro() {
-      let equiposDOM = document.querySelectorAll('#select-teams option:checked');
-      let ubicacionesDOM = document.querySelectorAll('#select-locations option:checked');
-      let equiposValues = Array.from(equiposDOM).map((equipo) => equipo.value);
-      let ubicacionesValues = Array.from(ubicacionesDOM).map((ubicacion) => ubicacion.value);
-
       let partidosFiltrados = this.partidos
-          .filter(partido => equiposValues.includes(partido.equipo1) || equiposValues.includes(partido.equipo2))
-          .filter(partido => ubicacionesValues.includes(partido.estadio.nombre));
+          .filter(partido => this.equiposSeleccionados.includes(partido.equipo1) ||
+                             this.equiposSeleccionados.includes(partido.equipo2))
+          .filter(partido => this.estadiosSeleccionados.includes(partido.estadio.nombre));
 
       this.$root.$emit('partidos-filtrados', partidosFiltrados);
-    }
+    },
+  },
+
+  // harcodeado hasta encontrar una solucion al select
+  created() {
+    this.equiposTotales = ['U1','U2','U3','U4','U5','U6'];
+    this.estadiosTotales = ['AJ Katzenmaier','Greenbay','Howard A Yeager','Marjorie P Hart','North','South'];
+    this.equiposSeleccionados = this.equiposTotales;
+    this.estadiosSeleccionados = this.estadiosTotales;
   }
 })
 
 Vue.component('calendar', {
   template: `
     <div class="row">
-      <div class="col s12">
-        <filtro :partidos="listadoPartidos.map((partido) => partidoFormateado(partido))"></filtro>
-      </div>
-      <span v-if="partidosFiltrados.length > 0">
-        <div class="col s12 m6">
-          <month 
-            v-for="mes in mesesConPartidos"
-            :juegosDelMes="partidosFiltradosPorMes(mes)"
-          ></month>
+      <span v-show="!foro.mostrar">
+        <div class="col s12">
+          <filtro :partidos="listadoPartidos"></filtro>
         </div>
-        <div class="col m6 hide-on-small-only flotante-top">
-          <map-container :estadio="estadioEnMapa"></map-container>
-        </div>
+
+        <span v-show="partidosFiltrados.length > 0">
+          <div class="col s12 m6">
+            <month 
+              v-for="mes in mesesConPartidos"
+              :juegosDelMes="partidosFiltradosPorMes(mes)"
+            ></month>
+          </div>
+          <div class="col m6 hide-on-small-only flotante-top">
+            <map-container :estadio="estadioEnMapa"></map-container>
+          </div>
+        </span>
+
+        <span v-show="partidosFiltrados.length === 0">
+          <error>There is no results to show.</error>
+        </span>
       </span>
-      <error v-else>There is no results to show</error>
-      
+      <span v-show="foro.mostrar">
+        <messages-container :partido="foro.juego"></messages-container>
+      </span>
     </div>
   `,
+
   data() {
     return {
       listadoPartidos: [],
-      listadoEstadios: [],
+      listadoEstadios: [], 
       partidosFiltrados: [],
-      estadioEnMapa: {},     
+      estadioEnMapa: {},
+      foro: {
+        mostrar: false,
+        juegoAMostrar: null
+      },
     }
   },
-  mounted() {
-    this.listadoPartidos = data.partidos;
-    this.listadoEstadios = data.estadios;
-    this.partidosFiltrados = this.listadoPartidos.map(partido => this.partidoFormateado(partido));
-    this.estadioEnMapa = this.estadioSegunPartido(this.listadoPartidos[0]);
-    
-    this.$root.$on('juegoPresionado', (juego) => {
-      this.estadioEnMapa = juego.estadio;
-    });
 
-    this.$root.$on('partidos-filtrados', (partidos) => {
-      this.partidosFiltrados = partidos;
-    });
+  created() {
+    this.pullBaseDeDatosInicial();
+    this.$root.$on('juegoPresionado', (juego) => { this.estadioEnMapa = juego.estadio });
+    this.$root.$on('partidos-filtrados', (partidos) => { this.partidosFiltrados = partidos });
+    this.$root.$on('activarForo', (juego) => { this.setearJuegoEnForo(juego) });
   },
+
   computed: {
     mesesConPartidos() {
       return [...new Set(this.listadoPartidos.map(partido => partido.mes))];
     }
   },
+
   methods: {
-    partidoFormateado(partido) {
-      let estadioBuscado = this.listadoEstadios.find(estadio => estadio.nombre === partido.estadio);
-      return {
-        equipo1: partido.equipo1,
-        equipo2: partido.equipo2,
-        horario: partido.horario,
-        fecha: partido.fecha,
-        mes: partido.mes,
-        estadio: estadioBuscado,
+    pullBaseDeDatosInicial() {
+      database.ref('/').once('value', snapshot => {
+        this.cargarEstadiosEnListado(snapshot.val().estadios);
+        this.cargarPartidosEnListado(snapshot.val().partidos);
+        this.partidosFiltrados = this.listadoPartidos;
+        this.estadioEnMapa = this.partidosFiltrados[0].estadio;
+      });
+    },
+
+    setearJuegoEnForo(juego) {
+      this.foro.juegoAMostrar = juego; 
+      this.foro.mostrar = true;
+    },
+
+    cargarEstadiosEnListado(objetoEstadios) {
+      let estadios = [];
+      
+      for(let key in objetoEstadios) {
+        estadios.push({
+          key: key,
+          nombre: objetoEstadios[key].nombre,
+          direccion: objetoEstadios[key].direccion,
+          mapUrl: objetoEstadios[key].mapUrl,
+          iframeUrl: objetoEstadios[key].iframeUrl,
+          imagen: objetoEstadios[key].imagen
+        });
       }
+
+      this.listadoEstadios = estadios;
     },
-    estadioSegunPartido(partido) {
-      return this.listadoEstadios.find(estadio => estadio.nombre === partido.estadio);
+
+    cargarPartidosEnListado(objetoPartidos) {
+      let partidos = [];
+
+      for(let key in objetoPartidos) {
+        partidos.push({
+          key: key,
+          equipo1: objetoPartidos[key].equipo1,
+          equipo2: objetoPartidos[key].equipo2,
+          horario: objetoPartidos[key].horario,
+          fecha: objetoPartidos[key].fecha,
+          mes: objetoPartidos[key].mes,
+          estadio: this.estadioSegunNombre(objetoPartidos[key].estadio),
+        });
+      }
+
+      this.listadoPartidos = partidos;
     },
+
+    estadioSegunNombre(nombreEstadio) {
+      return this.listadoEstadios.find(estadio => estadio.nombre === nombreEstadio);
+    },
+
     partidosFiltradosPorMes(mes) {
-      return this.partidosFiltrados.filter(partido => partido.mes === mes);
-    }
+      return this.partidosFiltrados.filter(partido => partido.mes === mes );
+    },
   }
 });
 
@@ -278,7 +394,7 @@ Vue.component('contact', {
         </div>
         <button class="btn-small waves-effect waves-light right blue darken-4" type="submit" name="action">Submit
         </button>
-    </form>
+      </form>
     </div>
       </div>
     </div>
@@ -314,20 +430,31 @@ Vue.component('about', {
 
 new Vue({
   el: '#app',
+
   data: {
     componenteActivo: 'calendar',
   },
+
   methods: {
     activarComponente(nombreComponente) {
       this.componenteActivo = nombreComponente;
     },
+
     estaActivoComponente(nombreComponente) {
       return this.componenteActivo === nombreComponente;
     }
   }
 });
 
-//inicializa todos los componentes de materialize
-document.addEventListener('DOMContentLoaded', () => {
-  M.AutoInit();
-});
+
+
+
+
+
+
+
+
+
+
+
+
