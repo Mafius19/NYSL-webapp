@@ -82,21 +82,14 @@ Vue.component('error', {
 Vue.component('comentario', {
   props: ['dataComentario'],
   template: `
-      <div class="col s12 m8 offset-m2 l6 offset-l3">
-        <div class="card-panel grey lighten-5 z-depth-1">
-          <div class="row valign-wrapper">
-            <div class="col s2">
-              <img :src="dataComentario.photoURL" class="circle responsive-img">
-            </div>
-            <div class="col s10">
-              <span class="black-text">
-                <h6>{{ dataComentario.displayName }}</h6>
-                {{ dataComentario.mensaje }}
-              </span>
-            </div>
-          </div>
-        </div>
+  <div class="row center-align">
+    <div class="col s12">
+      <div class="card-panel teal">
+        <h6>{{ dataComentario.displayName }}</h6>
+        <span>{{ dataComentario.mensaje }}</span>
       </div>
+    </div>
+  </div>
   `
 });
 
@@ -128,11 +121,15 @@ Vue.component('messages-container', {
           </span>
 
           <!-- VISTA USUARIO LOGUEADO -->
-          <span v-else>  
+          <span v-else>
+            <div class="row">
+              <textarea v-model="textoAComentar"></textarea>
+              <button @click="crearComentario">send</button>
               <comentario
                 v-for="comentario in listadoMensajes(partido.comentarios)"
                 :dataComentario="comentario"
               ></comentario>
+            </div>
           </span>
 
         </div>
@@ -174,10 +171,7 @@ Vue.component('messages-container', {
     },
 
     hayComentarios() {
-      if (this.partido.comentarios) {
-        return true;
-      }
-      return false;
+      return this.partido.comentarios;
     },
 
     crearComentario() {
@@ -187,7 +181,7 @@ Vue.component('messages-container', {
           mensaje: this.textoAComentar, 
           dataEmisor: {
               displayName: this.usuarioActivo.displayName,
-              photoURL: this.usuarioActivo.photoURL
+              photoURL: this.usuarioActivo.photoURL,
           }
         })
         .then(() => {this.textoAComentar = ''});
