@@ -19,6 +19,10 @@ const database = firebase.database();
 // Materialize init
 document.addEventListener('DOMContentLoaded', () => { M.AutoInit() });
 
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+// Vue navbar component
 Vue.component('navbar', {
   template: `
   <div>
@@ -60,6 +64,7 @@ Vue.component('navbar', {
   }
 });
 
+// Vue component
 Vue.component('error', {
   template: `
   <div class="row">
@@ -77,7 +82,9 @@ Vue.component('error', {
   `
 });
 
+
 //dataComentario.displayName dataComentario.photoURL dataComentario.mensaje
+
 
 Vue.component('comentario', {
   props: ['dataComentario'],
