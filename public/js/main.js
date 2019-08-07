@@ -75,7 +75,30 @@ Vue.component('error', {
     </div>
   </div>
   `
-})
+});
+
+//dataComentario.displayName dataComentario.photoURL dataComentario.mensaje
+
+Vue.component('comentario', {
+  props: ['dataComentario'],
+  template: `
+      <div class="col s12 m8 offset-m2 l6 offset-l3">
+        <div class="card-panel grey lighten-5 z-depth-1">
+          <div class="row valign-wrapper">
+            <div class="col s2">
+              <img :src="dataComentario.photoURL" class="circle responsive-img">
+            </div>
+            <div class="col s10">
+              <span class="black-text">
+                <h6>{{ dataComentario.displayName }}</h6>
+                {{ dataComentario.mensaje }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+  `
+});
 
 Vue.component('messages-container', {
   props: ['partido'],
@@ -84,24 +107,46 @@ Vue.component('messages-container', {
       <div class="col s12">
         <div class="card-panel">
 
+          <!-- MARCO VENTANA -->
+          <div class="row valign-wrapper">
+            <div class="col s10">
+              <h6>{{ partido.equipo1 }} vs {{ partido.equipo2 }} comments</h6>
+            </div>
+            <div class="col s2 right-align">
+              <i class="small material-icons" @click="emitirEventoCerrarForo">close</i>
+            </div>
+          </div>
+          
+          <!-- VISTA USUARIO SIN LOGUEAR -->
           <span v-if="!usuarioActivo">
             <div class="row center-align">
-              <h5>Loggin to your acount</h5>
-              <button class="btn-small red" @click="iniciarSesion()">Login with Google</button>
-              <button class="btn-small red" @click="cerrarSesion()">Log out</button>
+              <h6>Loggin to your acount</h6>
+              <button class="btn-small red" @click="iniciarSesion()">
+                Sign in with Google
+              </button>
             </div>
           </span>
 
-          <span v-if="usuarioActivo">
-            <div class="row center-align">
-              <h5>Ya estas logueado</h5>
-              <button class="btn-small red" @click="cerrarSesion()">Log out</button>
-            </div>
+          <!-- VISTA USUARIO LOGUEADO -->
+          <span v-else>  
+              <comentario
+                v-for="comentario in listadoMensajes(partido.comentarios)"
+                :dataComentario="comentario"
+              ></comentario>
           </span>
+
         </div>
       </div>
     </div>
   `,
+
+  data() {
+    return {
+      textoAComentar: '',
+      usuarioActivo: null,
+    }
+  },
+
   methods: {
     emitirEventoCerrarForo() {
       this.$root.$emit('cerrarForo');
@@ -114,25 +159,47 @@ Vue.component('messages-container', {
 
     cerrarSesion() {
       firebase.auth().signOut();
-    }
+    },
+
+    listadoMensajes(objetoMensajes) {
+      let mensajes = [];
+      for(let key in objetoMensajes) {
+        mensajes.push({
+          mensaje: objetoMensajes[key].mensaje,
+          displayName: objetoMensajes[key].dataEmisor.displayName,
+          photoURL: objetoMensajes[key].dataEmisor.photoURL,
+        });
+      }
+      return mensajes;
+    },
+
+    hayComentarios() {
+      if (this.partido.comentarios) {
+        return true;
+      }
+      return false;
+    },
+
+    crearComentario() {
+      database
+        .ref(`/partidos/${this.partido.key}/comentarios`)
+        .push({ 
+          mensaje: this.textoAComentar, 
+          dataEmisor: {
+              displayName: this.usuarioActivo.displayName,
+              photoURL: this.usuarioActivo.photoURL
+          }
+        })
+        .then(() => {this.textoAComentar = ''});
+    },
   },
 
   created() {
     this.usuarioActivo = firebase.auth().currentUser;
 
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.usuarioActivo = firebase.auth().currentUser;
-      } else {
-        this.usuarioActivo = null;
-      }
+      this.usuarioActivo = firebase.auth().currentUser;
     });
-  },
-
-  data() {
-    return {
-      usuarioActivo: null,
-    }
   },
 });
 
@@ -157,7 +224,7 @@ Vue.component('month', {
     <div class="col s12">
       <div class="card-panel">
         <ul class="collection with-header">
-          <li class="collection-headder center-align">
+          <li class="collection-header center-align">
             <h5>{{ juegosDelMes[0].mes }}</h5>
           </li>
           <li
@@ -193,7 +260,7 @@ Vue.component('month', {
 
     emitirEventoActivarForo(juego) {
       this.$root.$emit('activarForo', juego);
-    }
+    },
   }
 });
 
@@ -290,8 +357,8 @@ Vue.component('calendar', {
         </span>
       </span>
 
-      <span v-show="foro.mostrar">
-        <messages-container :partido="foro.juego"></messages-container>
+      <span v-if="foro.mostrar">
+        <messages-container :partido="foro.juegoAMostrar"></messages-container>
       </span>
     </div>
   `,
@@ -314,6 +381,7 @@ Vue.component('calendar', {
     this.$root.$on('juegoPresionado', (juego) => { this.estadioEnMapa = juego.estadio });
     this.$root.$on('partidos-filtrados', (partidos) => { this.partidosFiltrados = partidos });
     this.$root.$on('activarForo', (juego) => { this.setearJuegoEnForo(juego) });
+    this.$root.$on('cerrarForo', () => { this.foro.mostrar = false });
   },
 
   computed: {
@@ -324,7 +392,7 @@ Vue.component('calendar', {
 
   methods: {
     pullBaseDeDatosInicial() {
-      database.ref('/').once('value', snapshot => {
+      database.ref('/').on('value', snapshot => {
         this.cargarEstadiosEnListado(snapshot.val().estadios);
         this.cargarPartidosEnListado(snapshot.val().partidos);
         this.partidosFiltrados = this.listadoPartidos;
@@ -365,6 +433,7 @@ Vue.component('calendar', {
           horario: objetoPartidos[key].horario,
           fecha: objetoPartidos[key].fecha,
           mes: objetoPartidos[key].mes,
+          comentarios: objetoPartidos[key].comentarios,
           estadio: this.estadioSegunNombre(objetoPartidos[key].estadio),
         });
       }
