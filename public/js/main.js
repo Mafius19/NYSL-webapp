@@ -133,7 +133,7 @@ Vue.component('messages-container', {
             <div v-else class="row">
               <div class="row">
                 <div class="col s12">
-                  <textarea v-model="textoAComentar" placeholder="make a comment :)"></textarea>
+                  <textarea v-model="textoAComentar" placeholder="Message" class="materialize-textarea"></textarea>
                 </div>
                 <div class="col s12 right-align">
                   <button class="btn black" @click="crearComentario">+</button>
@@ -231,7 +231,7 @@ Vue.component('month', {
     <div class="col s12">
       <div class="card-panel">
         <ul class="collection with-header">
-          <li class="collection-header center-align">
+          <li class="center-align">
             <h5>{{ juegosDelMes[0].mes }}</h5>
           </li>
           <li
