@@ -29,7 +29,7 @@ Vue.component("navbar", {
   template: `
   <div>
     <div class="navbar-fixed">
-      <nav class="blue darken-4">
+      <nav class="black">
         <div class="nav-wrapper">
           <a href="#!" class="brand-logo"><slot></slot></a>
           <a href="#" data-target="menu-hamburguesa" class="sidenav-trigger">
@@ -39,13 +39,21 @@ Vue.component("navbar", {
           <ul class="right hide-on-med-and-down">
             <li><a href="#" @click="comunicarCambio('calendar')">Calendar</a></li>
             <li><a href="#" @click="comunicarCambio('about')">About Us</a></li>
-            <li><a href="#" @click="comunicarCambio('contact')">Contact</a></li>
+            <li><a href="#" @click="comunicarCambio('contact')">Contact</a></li> 
           </ul>
         </div>    
       </nav>
     </div>
 
     <ul id="menu-hamburguesa" class="sidenav show-on-medium-and-down grey lighten-4">
+      <div class="row">
+        <div class="col s4"></div>
+        <div class="col s4">
+          <img id="imagen-menu" src="img/nysl_logo.png" class="responsive-img">
+        </div>
+        <div class="col s4"></div>
+      </div>
+      <li class="divider"></li>
       <li class="sidenav-close"><a href="#" @click="comunicarCambio('calendar')">
         <i class="material-icons">event</i>Calendar</a>
       </li>
@@ -89,6 +97,7 @@ Vue.component("error", {
 Vue.component("comentario", {
   props: ["dataComentario"],
   template: `
+    <div class="row">
       <div class="col s12 m8 offset-m2 l6 offset-l3">
         <div class="card-panel grey lighten-5 z-depth-1">
           <div class="row valign-wrapper">
@@ -104,6 +113,7 @@ Vue.component("comentario", {
           </div>
         </div>
       </div>
+    </div>
   `
 });
 
@@ -135,12 +145,20 @@ Vue.component("messages-container", {
           </span>
 
           <!-- VISTA USUARIO LOGUEADO -->
-          <span v-else>  
+            <div v-else class="row">
+              <div class="row">
+                <div class="col s12">
+                  <textarea v-model="textoAComentar" placeholder="Message" class="materialize-textarea"></textarea>
+                </div>
+                <div class="col s12 right-align">
+                  <button class="btn black" @click="crearComentario">+</button>
+                </div>
+              </div>
               <comentario
-                v-for="comentario in listadoMensajes(partido.comentarios)"
+                v-for="comentario in listadoMensajes(partido.comentarios).reverse()"
                 :dataComentario="comentario"
               ></comentario>
-          </span>
+            </div>
 
         </div>
       </div>
@@ -181,10 +199,7 @@ Vue.component("messages-container", {
     },
 
     hayComentarios() {
-      if (this.partido.comentarios) {
-        return true;
-      }
-      return false;
+      return this.partido.comentarios;
     },
 
     crearComentario() {
@@ -233,7 +248,7 @@ Vue.component("month", {
     <div class="col s12">
       <div class="card-panel">
         <ul class="collection with-header">
-          <li class="collection-header center-align">
+          <li class="center-align">
             <h5>{{ juegosDelMes[0].mes }}</h5>
           </li>
           <li
@@ -244,13 +259,13 @@ Vue.component("month", {
             <div class="col s4">{{ juego.equipo1 }}</div>
             <div class="col s4">
               <div class="row">
+                <div class="col s12">
+                  <a href="#" class="blue-text text-darken-4" @click="emitirEventoActivarForo(juego)">Comments</a>
+                </div>
                 <div class="col s12">{{ juego.fecha }}</div>
                 <div class="col s12">{{ juego.horario }}</div>
                 <div class="col s12">
                   <a :href="juego.estadio.mapUrl" class="blue-text text-darken-4"><b>{{ juego.estadio.nombre }}</b></a>
-                </div>
-                <div>
-                  <a href="#" class="blue-text text-darken-4" @click="emitirEventoActivarForo(juego)"><b>Messages</b></a>
                 </div>
               </div>
             </div>
@@ -510,7 +525,7 @@ Vue.component("contact", {
             </div>
           </div>
         </div>
-        <button class="btn-small waves-effect waves-light right blue darken-4" type="submit" name="action">Submit
+        <button class="btn-small black waves-effect waves-light right" type="submit" name="action">Submit
         </button>
       </form>
     </div>

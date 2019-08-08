@@ -1,6 +1,9 @@
 body {
   font-family: "Roboto", sans-serif;
 }
+#imagen-menu {
+  padding-top: 20px;
+}
 
 #iframe-mapa {
   padding-left: 0;
