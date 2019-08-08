@@ -1,10 +1,46 @@
+body {
+  font-family: "Roboto", sans-serif;
+}
+
 #iframe-mapa {
-    padding-left: 0;
-    padding-right: 0;
-    border: 0px;
+  padding-left: 0;
+  padding-right: 0;
+  border: 0px;
+}
+
+.collection.with-header .collection-header {
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: inherit;
 }
 
 .flotante-top {
-    position: sticky;
-    top: 30px;
+  position: sticky;
+  top: 30px;
+}
+
+.center-align {
+  padding: 0%;
+}
+
+.with-header li {
+  padding: 5%;
+  border: 1px solid #e0e0e0;
+  border-radius: 2px;
+  background-color: rgb(104, 216, 113);
+}
+
+.with-header li:hover,
+li:focus {
+  background-color: rgb(83, 148, 76);
+}
+
+#stripes {
+  background-image: repeating-linear-gradient(
+    145deg,
+    rgb(40, 114, 19),
+    rgb(40, 114, 19) 30px,
+    rgb(55, 100, 41) 30px,
+    rgb(55, 100, 41) 60px
+  );
 }

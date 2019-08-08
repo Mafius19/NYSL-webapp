@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
 // Config Firebase
 var firebaseConfig = {
-    apiKey: "AIzaSyCfUCM93A6itbYUrv-jhMyY6pvK9tlveV4",
-    authDomain: "nysl-cap-webapp.firebaseapp.com",
-    databaseURL: "https://nysl-cap-webapp.firebaseio.com",
-    projectId: "nysl-cap-webapp",
-    storageBucket: "",
-    messagingSenderId: "44674422756",
-    appId: "1:44674422756:web:fbb1d5df703b8944"
+  apiKey: "AIzaSyCfUCM93A6itbYUrv-jhMyY6pvK9tlveV4",
+  authDomain: "nysl-cap-webapp.firebaseapp.com",
+  databaseURL: "https://nysl-cap-webapp.firebaseio.com",
+  projectId: "nysl-cap-webapp",
+  storageBucket: "",
+  messagingSenderId: "44674422756",
+  appId: "1:44674422756:web:fbb1d5df703b8944"
 };
 
 // Initialize Firebase
@@ -17,13 +17,15 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 // Materialize init
-document.addEventListener('DOMContentLoaded', () => { M.AutoInit() });
+document.addEventListener("DOMContentLoaded", () => {
+  M.AutoInit();
+});
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
 // Vue navbar component
-Vue.component('navbar', {
+Vue.component("navbar", {
   template: `
   <div>
     <div class="navbar-fixed">
@@ -65,7 +67,7 @@ Vue.component('navbar', {
 });
 
 // Vue component
-Vue.component('error', {
+Vue.component("error", {
   template: `
   <div class="row">
     <div class="col s12">
@@ -82,12 +84,10 @@ Vue.component('error', {
   `
 });
 
-
 //dataComentario.displayName dataComentario.photoURL dataComentario.mensaje
 
-
-Vue.component('comentario', {
-  props: ['dataComentario'],
+Vue.component("comentario", {
+  props: ["dataComentario"],
   template: `
       <div class="col s12 m8 offset-m2 l6 offset-l3">
         <div class="card-panel grey lighten-5 z-depth-1">
@@ -107,8 +107,8 @@ Vue.component('comentario', {
   `
 });
 
-Vue.component('messages-container', {
-  props: ['partido'],
+Vue.component("messages-container", {
+  props: ["partido"],
   template: `
     <div class="row">
       <div class="col s12">
@@ -149,14 +149,14 @@ Vue.component('messages-container', {
 
   data() {
     return {
-      textoAComentar: '',
-      usuarioActivo: null,
-    }
+      textoAComentar: "",
+      usuarioActivo: null
+    };
   },
 
   methods: {
     emitirEventoCerrarForo() {
-      this.$root.$emit('cerrarForo');
+      this.$root.$emit("cerrarForo");
     },
 
     iniciarSesion() {
@@ -170,11 +170,11 @@ Vue.component('messages-container', {
 
     listadoMensajes(objetoMensajes) {
       let mensajes = [];
-      for(let key in objetoMensajes) {
+      for (let key in objetoMensajes) {
         mensajes.push({
           mensaje: objetoMensajes[key].mensaje,
           displayName: objetoMensajes[key].dataEmisor.displayName,
-          photoURL: objetoMensajes[key].dataEmisor.photoURL,
+          photoURL: objetoMensajes[key].dataEmisor.photoURL
         });
       }
       return mensajes;
@@ -190,28 +190,30 @@ Vue.component('messages-container', {
     crearComentario() {
       database
         .ref(`/partidos/${this.partido.key}/comentarios`)
-        .push({ 
-          mensaje: this.textoAComentar, 
+        .push({
+          mensaje: this.textoAComentar,
           dataEmisor: {
-              displayName: this.usuarioActivo.displayName,
-              photoURL: this.usuarioActivo.photoURL
+            displayName: this.usuarioActivo.displayName,
+            photoURL: this.usuarioActivo.photoURL
           }
         })
-        .then(() => {this.textoAComentar = ''});
-    },
+        .then(() => {
+          this.textoAComentar = "";
+        });
+    }
   },
 
   created() {
     this.usuarioActivo = firebase.auth().currentUser;
 
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       this.usuarioActivo = firebase.auth().currentUser;
     });
-  },
+  }
 });
 
-Vue.component('map-container', {
-  props: ['estadio'],
+Vue.component("map-container", {
+  props: ["estadio"],
   template: `
       <div class="col s12">
         <div class="card-panel">
@@ -225,8 +227,8 @@ Vue.component('map-container', {
   `
 });
 
-Vue.component('month', {
-  props: ['juegosDelMes'],
+Vue.component("month", {
+  props: ["juegosDelMes"],
   template: `
     <div class="col s12">
       <div class="card-panel">
@@ -245,10 +247,10 @@ Vue.component('month', {
                 <div class="col s12">{{ juego.fecha }}</div>
                 <div class="col s12">{{ juego.horario }}</div>
                 <div class="col s12">
-                  <a :href="juego.estadio.mapUrl" class="blue-text text-darken-4">{{ juego.estadio.nombre }}</a>
+                  <a :href="juego.estadio.mapUrl" class="blue-text text-darken-4"><b>{{ juego.estadio.nombre }}</b></a>
                 </div>
                 <div>
-                  <a href="#" class="blue-text text-darken-4" @click="emitirEventoActivarForo(juego)">Messages</a>
+                  <a href="#" class="blue-text text-darken-4" @click="emitirEventoActivarForo(juego)"><b>Messages</b></a>
                 </div>
               </div>
             </div>
@@ -262,17 +264,17 @@ Vue.component('month', {
 
   methods: {
     emitirEventoJuegoPresionado(juegoPresionado) {
-      this.$root.$emit('juegoPresionado', juegoPresionado);
+      this.$root.$emit("juegoPresionado", juegoPresionado);
     },
 
     emitirEventoActivarForo(juego) {
-      this.$root.$emit('activarForo', juego);
-    },
+      this.$root.$emit("activarForo", juego);
+    }
   }
 });
 
-Vue.component('filtro', {
-  props: ['partidos'],
+Vue.component("filtro", {
+  props: ["partidos"],
   template: `
   <ul class="collapsible">
     <li>
@@ -315,31 +317,43 @@ Vue.component('filtro', {
       equiposTotales: [],
       estadiosTotales: [],
       equiposSeleccionados: [],
-      estadiosSeleccionados: [],
-    }
+      estadiosSeleccionados: []
+    };
   },
 
   methods: {
     emitirEventoFiltro() {
       let partidosFiltrados = this.partidos
-          .filter(partido => this.equiposSeleccionados.includes(partido.equipo1) ||
-                             this.equiposSeleccionados.includes(partido.equipo2))
-          .filter(partido => this.estadiosSeleccionados.includes(partido.estadio.nombre));
+        .filter(
+          partido =>
+            this.equiposSeleccionados.includes(partido.equipo1) ||
+            this.equiposSeleccionados.includes(partido.equipo2)
+        )
+        .filter(partido =>
+          this.estadiosSeleccionados.includes(partido.estadio.nombre)
+        );
 
-      this.$root.$emit('partidos-filtrados', partidosFiltrados);
-    },
+      this.$root.$emit("partidos-filtrados", partidosFiltrados);
+    }
   },
 
   // harcodeado hasta encontrar una solucion al select
   created() {
-    this.equiposTotales = ['U1','U2','U3','U4','U5','U6'];
-    this.estadiosTotales = ['AJ Katzenmaier','Greenbay','Howard A Yeager','Marjorie P Hart','North','South'];
+    this.equiposTotales = ["U1", "U2", "U3", "U4", "U5", "U6"];
+    this.estadiosTotales = [
+      "AJ Katzenmaier",
+      "Greenbay",
+      "Howard A Yeager",
+      "Marjorie P Hart",
+      "North",
+      "South"
+    ];
     this.equiposSeleccionados = this.equiposTotales;
     this.estadiosSeleccionados = this.estadiosTotales;
   }
-})
+});
 
-Vue.component('calendar', {
+Vue.component("calendar", {
   template: `
     <div class="row">
       <span v-show="!foro.mostrar">
@@ -373,22 +387,30 @@ Vue.component('calendar', {
   data() {
     return {
       listadoPartidos: [],
-      listadoEstadios: [], 
+      listadoEstadios: [],
       partidosFiltrados: [],
       estadioEnMapa: {},
       foro: {
         mostrar: false,
         juegoAMostrar: null
-      },
-    }
+      }
+    };
   },
 
   created() {
     this.pullBaseDeDatosInicial();
-    this.$root.$on('juegoPresionado', (juego) => { this.estadioEnMapa = juego.estadio });
-    this.$root.$on('partidos-filtrados', (partidos) => { this.partidosFiltrados = partidos });
-    this.$root.$on('activarForo', (juego) => { this.setearJuegoEnForo(juego) });
-    this.$root.$on('cerrarForo', () => { this.foro.mostrar = false });
+    this.$root.$on("juegoPresionado", juego => {
+      this.estadioEnMapa = juego.estadio;
+    });
+    this.$root.$on("partidos-filtrados", partidos => {
+      this.partidosFiltrados = partidos;
+    });
+    this.$root.$on("activarForo", juego => {
+      this.setearJuegoEnForo(juego);
+    });
+    this.$root.$on("cerrarForo", () => {
+      this.foro.mostrar = false;
+    });
   },
 
   computed: {
@@ -399,7 +421,7 @@ Vue.component('calendar', {
 
   methods: {
     pullBaseDeDatosInicial() {
-      database.ref('/').on('value', snapshot => {
+      database.ref("/").on("value", snapshot => {
         this.cargarEstadiosEnListado(snapshot.val().estadios);
         this.cargarPartidosEnListado(snapshot.val().partidos);
         this.partidosFiltrados = this.listadoPartidos;
@@ -408,14 +430,14 @@ Vue.component('calendar', {
     },
 
     setearJuegoEnForo(juego) {
-      this.foro.juegoAMostrar = juego; 
+      this.foro.juegoAMostrar = juego;
       this.foro.mostrar = true;
     },
 
     cargarEstadiosEnListado(objetoEstadios) {
       let estadios = [];
-      
-      for(let key in objetoEstadios) {
+
+      for (let key in objetoEstadios) {
         estadios.push({
           key: key,
           nombre: objetoEstadios[key].nombre,
@@ -432,7 +454,7 @@ Vue.component('calendar', {
     cargarPartidosEnListado(objetoPartidos) {
       let partidos = [];
 
-      for(let key in objetoPartidos) {
+      for (let key in objetoPartidos) {
         partidos.push({
           key: key,
           equipo1: objetoPartidos[key].equipo1,
@@ -441,7 +463,7 @@ Vue.component('calendar', {
           fecha: objetoPartidos[key].fecha,
           mes: objetoPartidos[key].mes,
           comentarios: objetoPartidos[key].comentarios,
-          estadio: this.estadioSegunNombre(objetoPartidos[key].estadio),
+          estadio: this.estadioSegunNombre(objetoPartidos[key].estadio)
         });
       }
 
@@ -449,16 +471,18 @@ Vue.component('calendar', {
     },
 
     estadioSegunNombre(nombreEstadio) {
-      return this.listadoEstadios.find(estadio => estadio.nombre === nombreEstadio);
+      return this.listadoEstadios.find(
+        estadio => estadio.nombre === nombreEstadio
+      );
     },
 
     partidosFiltradosPorMes(mes) {
-      return this.partidosFiltrados.filter(partido => partido.mes === mes );
-    },
+      return this.partidosFiltrados.filter(partido => partido.mes === mes);
+    }
   }
 });
 
-Vue.component('contact', {
+Vue.component("contact", {
   template: `
   <div class="row">
     <div class="col s12">
@@ -496,7 +520,7 @@ Vue.component('contact', {
   `
 });
 
-Vue.component('about', {
+Vue.component("about", {
   template: `
       <div class="row">
         <div class="col s12">
@@ -523,10 +547,10 @@ Vue.component('about', {
 });
 
 new Vue({
-  el: '#app',
+  el: "#app",
 
   data: {
-    componenteActivo: 'calendar',
+    componenteActivo: "calendar"
   },
 
   methods: {
@@ -539,16 +563,3 @@ new Vue({
     }
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
