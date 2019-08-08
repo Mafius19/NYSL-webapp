@@ -23,7 +23,7 @@ Vue.component('navbar', {
   template: `
   <div>
     <div class="navbar-fixed">
-      <nav class="blue darken-4">
+      <nav class="black">
         <div class="nav-wrapper">
           <a href="#!" class="brand-logo"><slot></slot></a>
           <a href="#" data-target="menu-hamburguesa" class="sidenav-trigger">
@@ -82,14 +82,23 @@ Vue.component('error', {
 Vue.component('comentario', {
   props: ['dataComentario'],
   template: `
-  <div class="row center-align">
-    <div class="col s12">
-      <div class="card-panel teal">
-        <h6>{{ dataComentario.displayName }}</h6>
-        <span>{{ dataComentario.mensaje }}</span>
+    <div class="row">
+      <div class="col s12 m8 offset-m2 l6 offset-l3">
+        <div class="card-panel grey lighten-5 z-depth-1">
+          <div class="row valign-wrapper">
+            <div class="col s2">
+              <img :src="dataComentario.photoURL" class="circle responsive-img">
+            </div>
+            <div class="col s10">
+              <span class="black-text">
+                <h6>{{ dataComentario.displayName }}</h6>
+                {{ dataComentario.mensaje }}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
   `
 });
 
@@ -121,16 +130,20 @@ Vue.component('messages-container', {
           </span>
 
           <!-- VISTA USUARIO LOGUEADO -->
-          <span v-else>
-            <div class="row">
-              <textarea v-model="textoAComentar"></textarea>
-              <button @click="crearComentario">send</button>
+            <div v-else class="row">
+              <div class="row">
+                <div class="col s12">
+                  <textarea v-model="textoAComentar" placeholder="make a comment :)"></textarea>
+                </div>
+                <div class="col s12 right-align">
+                  <button class="btn black" @click="crearComentario">+</button>
+                </div>
+              </div>
               <comentario
-                v-for="comentario in listadoMensajes(partido.comentarios)"
+                v-for="comentario in listadoMensajes(partido.comentarios).reverse()"
                 :dataComentario="comentario"
               ></comentario>
             </div>
-          </span>
 
         </div>
       </div>
@@ -229,13 +242,13 @@ Vue.component('month', {
             <div class="col s4">{{ juego.equipo1 }}</div>
             <div class="col s4">
               <div class="row">
+                <div class="col s12">
+                  <a href="#" class="blue-text text-darken-4" @click="emitirEventoActivarForo(juego)">Comments</a>
+                </div>
                 <div class="col s12">{{ juego.fecha }}</div>
                 <div class="col s12">{{ juego.horario }}</div>
                 <div class="col s12">
                   <a :href="juego.estadio.mapUrl" class="blue-text text-darken-4">{{ juego.estadio.nombre }}</a>
-                </div>
-                <div>
-                  <a href="#" class="blue-text text-darken-4" @click="emitirEventoActivarForo(juego)">Messages</a>
                 </div>
               </div>
             </div>
@@ -473,7 +486,7 @@ Vue.component('contact', {
             </div>
           </div>
         </div>
-        <button class="btn-small waves-effect waves-light right blue darken-4" type="submit" name="action">Submit
+        <button class="btn-small black waves-effect waves-light right" type="submit" name="action">Submit
         </button>
       </form>
     </div>
