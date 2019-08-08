@@ -137,7 +137,7 @@ Vue.component("messages-container", {
           <!-- VISTA USUARIO SIN LOGUEAR -->
           <span v-if="!usuarioActivo">
             <div class="row center-align">
-              <h6>Loggin to your acount</h6>
+              <h6>Login to your account</h6>
               <button class="btn-small red" @click="iniciarSesion()">
                 Sign in with Google
               </button>
@@ -389,7 +389,7 @@ Vue.component("calendar", {
         </span>
 
         <span v-show="partidosFiltrados.length === 0">
-          <error>There is no results to show.</error>
+          <error>There are no results to show.</error>
         </span>
       </span>
 

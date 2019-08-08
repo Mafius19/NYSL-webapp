@@ -1,6 +1,7 @@
 body {
   font-family: "Roboto", sans-serif;
 }
+
 #imagen-menu {
   padding-top: 20px;
 }
@@ -26,16 +27,14 @@ body {
   padding: 0%;
 }
 
-.with-header li {
-  padding: 5%;
+.collection.with-header li {
   border: 1px solid #e0e0e0;
   border-radius: 2px;
-  background-color: rgb(104, 216, 113);
 }
 
-.with-header li:hover,
-li:focus {
-  background-color: rgb(83, 148, 76);
+li .row {
+  margin-bottom: 0%;
+  padding: 5%;
 }
 
 #stripes {
