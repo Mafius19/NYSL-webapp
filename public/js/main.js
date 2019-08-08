@@ -33,13 +33,21 @@ Vue.component('navbar', {
           <ul class="right hide-on-med-and-down">
             <li><a href="#" @click="comunicarCambio('calendar')">Calendar</a></li>
             <li><a href="#" @click="comunicarCambio('about')">About Us</a></li>
-            <li><a href="#" @click="comunicarCambio('contact')">Contact</a></li>
+            <li><a href="#" @click="comunicarCambio('contact')">Contact</a></li> 
           </ul>
         </div>    
       </nav>
     </div>
 
     <ul id="menu-hamburguesa" class="sidenav show-on-medium-and-down grey lighten-4">
+      <div class="row">
+        <div class="col s4"></div>
+        <div class="col s4">
+          <img id="imagen-menu" src="img/nysl_logo.png" class="responsive-img">
+        </div>
+        <div class="col s4"></div>
+      </div>
+      <li class="divider"></li>
       <li class="sidenav-close"><a href="#" @click="comunicarCambio('calendar')">
         <i class="material-icons">event</i>Calendar</a>
       </li>
