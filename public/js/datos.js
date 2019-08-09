@@ -47,6 +47,8 @@ let data = {
     {
       id: 0,
       equipo1: "U1",
+      equipo1Img: "./img/u1_logo.png",
+      equipo2Img: "./img/u1_logo.png",
       equipo2: "U4",
       horario: "9:30",
       estadio: "AJ Katzenmaier",
@@ -56,6 +58,8 @@ let data = {
     {
       id: 1,
       equipo1: "U3",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U2",
       horario: "13:00",
       estadio: "Greenbay",
@@ -65,6 +69,8 @@ let data = {
     {
       id: 2,
       equipo1: "U5",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U6",
       horario: "9:30",
       estadio: "Howard A Yeager",
@@ -74,6 +80,8 @@ let data = {
     {
       id: 3,
       equipo1: "U6",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U1",
       horario: "13:00",
       estadio: "Marjorie P Hart",
@@ -83,6 +91,8 @@ let data = {
     {
       id: 4,
       equipo1: "U2",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U4",
       horario: "9:30",
       estadio: "North",
@@ -92,6 +102,8 @@ let data = {
     {
       id: 5,
       equipo1: "U3",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U5",
       horario: "13:00",
       estadio: "AJ Katzenmaier",
@@ -101,6 +113,8 @@ let data = {
     {
       id: 6,
       equipo1: "U1",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U3",
       horario: "13:00",
       estadio: "South",
@@ -110,6 +124,8 @@ let data = {
     {
       id: 7,
       equipo1: "U2",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U6",
       horario: "13:00",
       estadio: "Howard A Yeager",
@@ -119,6 +135,8 @@ let data = {
     {
       id: 8,
       equipo1: "U4",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U5",
       horario: "13:00",
       estadio: "Greenbay",
@@ -128,6 +146,8 @@ let data = {
     {
       id: 9,
       equipo1: "U2",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U6",
       horario: "13:00",
       estadio: "Howard A Yeager",
@@ -137,6 +157,8 @@ let data = {
     {
       id: 10,
       equipo1: "U2",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U5",
       horario: "9:30",
       estadio: "Marjorie P Hart",
@@ -146,6 +168,8 @@ let data = {
     {
       id: 11,
       equipo1: "U1",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U6",
       horario: "13:00",
       estadio: "South",
@@ -155,6 +179,8 @@ let data = {
     {
       id: 12,
       equipo1: "U3",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U4",
       horario: "9:30",
       estadio: "Howard A Yeager",
@@ -164,6 +190,8 @@ let data = {
     {
       id: 13,
       equipo1: "U6",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U3",
       horario: "13:00",
       estadio: "North",
@@ -173,6 +201,8 @@ let data = {
     {
       id: 14,
       equipo1: "U2",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U4",
       horario: "9:30",
       estadio: "Marjorie P Hart",
@@ -182,6 +212,8 @@ let data = {
     {
       id: 15,
       equipo1: "U3",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U1",
       horario: "13:00",
       estadio: "AJ Katzenmaier",
@@ -191,6 +223,8 @@ let data = {
     {
       id: 16,
       equipo1: "U5",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U6",
       horario: "9:30",
       estadio: "Howard A Yeager",
@@ -200,6 +234,8 @@ let data = {
     {
       id: 17,
       equipo1: "U1",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U4",
       horario: "9:30",
       estadio: "AJ Katzenmaier",
@@ -209,6 +245,8 @@ let data = {
     {
       id: 18,
       equipo1: "U3",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U2",
       horario: "13:00",
       estadio: "Greenbay",
@@ -218,6 +256,8 @@ let data = {
     {
       id: 19,
       equipo1: "U5",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U6",
       horario: "9:30",
       estadio: "Howard A Yeager",
@@ -227,6 +267,8 @@ let data = {
     {
       id: 20,
       equipo1: "U6",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U1",
       horario: "13:00",
       estadio: "Marjorie P Hart",
@@ -236,6 +278,8 @@ let data = {
     {
       id: 21,
       equipo1: "U2",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U4",
       horario: "9:30",
       estadio: "North",
@@ -245,6 +289,8 @@ let data = {
     {
       id: 22,
       equipo1: "U3",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U5",
       horario: "13:00",
       estadio: "AJ Katzenmaier",
@@ -254,6 +300,8 @@ let data = {
     {
       id: 23,
       equipo1: "U1",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U3",
       horario: "13:00",
       estadio: "South",
@@ -263,6 +311,8 @@ let data = {
     {
       id: 24,
       equipo1: "U2",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U6",
       horario: "13:00",
       estadio: "Howard A Yeager",
@@ -272,6 +322,8 @@ let data = {
     {
       id: 25,
       equipo1: "U4",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U5",
       horario: "13:00",
       estadio: "Greenbay",
@@ -281,6 +333,8 @@ let data = {
     {
       id: 26,
       equipo1: "U2",
+      equipo1Img: "img/u1_logo.png",
+      equipo2Img: "img/u1_logo.png",
       equipo2: "U6",
       horario: "13:00",
       estadio: "Howard A Yeager",

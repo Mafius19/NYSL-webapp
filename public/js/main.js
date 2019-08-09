@@ -39,7 +39,7 @@ Vue.component('navbar', {
       </nav>
     </div>
 
-    <ul id="menu-hamburguesa" class="sidenav show-on-medium-and-down grey lighten-4">
+    <ul id="menu-hamburguesa" class="sidenav show-on-medium-and-down grey lighten-4 navbarC">
       <div class="row">
         <div class="col s4"></div>
         <div class="col s4">
@@ -222,9 +222,9 @@ Vue.component('map-container', {
   props: ['estadio'],
   template: `
       <div class="col s12">
-        <div class="card-panel">
+        <div class="cards card-panel">
           <div class="row center-align"><h5>{{ estadio.nombre }}</h5></div>
-          <div class="row">
+          <div class="bordeMapa row">
             <iframe id="iframe-mapa" class="col s12" :src="estadio.iframeUrl"></iframe>
           </div>
           <div class="row center-align">{{ estadio.direccion }}</div>
@@ -237,7 +237,7 @@ Vue.component('month', {
   props: ['juegosDelMes'],
   template: `
     <div class="col s12">
-      <div class="card-panel">
+      <div class="cards card-panel">
         <ul class="collection with-header">
           <li class="center-align">
             <h5>{{ juegosDelMes[0].mes }}</h5>
@@ -247,7 +247,11 @@ Vue.component('month', {
             @click="emitirEventoJuegoPresionado(juego)"
           >
           <div class="row center-align">
-            <div class="col s4">{{ juego.equipo1 }}</div>
+            <div class="col s4">
+            <!-- <img :src="juego.equipo1Img" alt="Team 1 Logo"> -->
+            <img src="./img/u1_logo.png" alt="Team 1 Logo" width="40%">
+            <p class="card-title">{{ juego.equipo1 }}</p>
+            </div>
             <div class="col s4">
               <div class="row">
                 <div class="col s12">
@@ -260,7 +264,8 @@ Vue.component('month', {
                 </div>
               </div>
             </div>
-            <div class="col s4">{{ juego.equipo2 }}</div>
+            <div class="col s4"><img src="./img/u1_logo.png" alt="Team 1 Logo" width="40%">
+            <p class="card-title">{{ juego.equipo2 }}</p></div>
             </div>
           </li>
         </ul>
@@ -284,8 +289,8 @@ Vue.component('filtro', {
   template: `
   <ul class="collapsible">
     <li>
-      <div class="collapsible-header"><i class="material-icons">settings</i>Filters</div>
-      <div class="collapsible-body white">
+      <div class="filtro collapsible-header"><i class="material-icons">settings</i>Filters</div>
+      <div class="filtro collapsible-body white">
         <div class="row">
           <div class="input-field col s12">
             <select multiple v-model="equiposSeleccionados" @change="emitirEventoFiltro()">
@@ -444,6 +449,8 @@ Vue.component('calendar', {
         partidos.push({
           key: key,
           equipo1: objetoPartidos[key].equipo1,
+          equipo1Img: objetoPartidos[key].equipo1Img,
+
           equipo2: objetoPartidos[key].equipo2,
           horario: objetoPartidos[key].horario,
           fecha: objetoPartidos[key].fecha,

@@ -28,7 +28,6 @@
 <body class="grey lighten-2">
   <div id="app">
     <navbar @cambia-componente="activarComponente">NYSL</navbar>
-
     <div class="section">
       <calendar v-show="estaActivoComponente('calendar')"></calendar>
       <about v-show="estaActivoComponente('about')"></about>
